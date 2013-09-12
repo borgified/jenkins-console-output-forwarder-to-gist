@@ -17,20 +17,33 @@ my($worker,$build)=@ARGV;
 
 my $filename = "/var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker/builds/$build/log";
 
-open(my $fh, '<:encoding(UTF-8)', $filename) or die "Could not open file '$filename' $!"
+open(my $fh, '<:encoding(UTF-8)', $filename) or die "Could not open file '$filename' $!";
 
-while (my $row = <$fh>) {
-	chomp $row;
-	print "$row\n";
-}
+my $log = do { local $/; <$fh> };
+
+
+#6544858
+
+$gist->update( 6544858, {
+		description => "",
+		"files"  =>  {
+			"file1.txt" => {
+				"content" => $log,
+			}
+		}
+	}
+);
+
+
 __END__
+
 
 $gist->create({
 "description" => "the description for this gist",
 "public" => 'true',
 "files"  =>  {
 "file1.txt" => {
-"content" => "String file contents"
+"content" => $log,
 }
 }
 } 
