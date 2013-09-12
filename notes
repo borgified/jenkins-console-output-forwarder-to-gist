@@ -1,0 +1,12 @@
+this is where the logs are
+/var/lib/jenkins/jobs/assimmon/configurations/axis-label/arilou/builds/46
+
+these are the names of the other workers
+  <string>arilou</string>
+        <string>chmmr</string>
+        <string>melnorme</string>
+        <string>supox</string>
+        <string>urquan</string>
+        <string>vux</string>
+        <string>yehat</string>
+
