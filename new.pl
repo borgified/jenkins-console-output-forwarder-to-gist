@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use Data::Dumper;
 
 use Net::GitHub::V3;
 
@@ -17,17 +18,21 @@ my($worker,$build)=@ARGV;
 
 my $filename = "/var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker/builds/$build/log";
 
-open(my $fh, '<:encoding(UTF-8)', $filename) or die "Could not open file '$filename' $!";
+open(my $fh, '<', $filename) or die "Could not open file '$filename' $!";
 
 my $log = do { local $/; <$fh> };
 
 
-#6544858
+$log =~ /cat (.*)sudo apt-get update\n/s;
+my $details=$1;
 
-$gist->update( 6544858, {
-		description => "",
+my %gistconfig = do '/tmp/gists';
+
+
+$gist->update( $gistconfig{$worker}, {
+		description => "build: $build $details",
 		"files"  =>  {
-			"file1.txt" => {
+			"build.log" => {
 				"content" => $log,
 			}
 		}
@@ -35,14 +40,32 @@ $gist->update( 6544858, {
 );
 
 
+#open (my $f,'>>',"/tmp/gists");
+#print $f "$worker => \'$a->{id}\'\n";
+
+
 __END__
 
+#6544858
 
-$gist->create({
-"description" => "the description for this gist",
-"public" => 'true',
+$gist->update( 6544858, {
+description => "",
 "files"  =>  {
 "file1.txt" => {
+"content" => $log,
+}
+}
+}
+);
+
+
+__END__
+
+my $a = $gist->create({
+"description" => "console output for $worker\n$details",
+"public" => 'true',
+"files"  =>  {
+"build.log" => {
 "content" => $log,
 }
 }
