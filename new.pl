@@ -26,7 +26,7 @@ my $log = do { local $/; <$fh> };
 $log =~ /cat (.*)sudo apt-get update\n/s;
 my $details=$1;
 
-my %gistconfig = do '/tmp/gists';
+my %gistconfig = do '/secret/gists.config';
 
 
 $gist->update( $gistconfig{$worker}, {
