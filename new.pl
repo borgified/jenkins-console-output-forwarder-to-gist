@@ -29,7 +29,7 @@ my $details=$1;
 my %gistconfig = do '/secret/gists.config';
 
 
-$gist->update( $gistconfig{$worker}, {
+my $r = $gist->update( $gistconfig{$worker}, {
 		description => "build: $build $details",
 		"files"  =>  {
 			"build.log" => {
@@ -38,6 +38,22 @@ $gist->update( $gistconfig{$worker}, {
 		}
 	}
 );
+
+my $raw_url = $r->{files}->{'build.log'}->{raw_url};
+
+my $all_log = $gist->gist(7542687);
+my $all_log_content = $all_log->{files}->{'all.log'}->{content};
+
+$gist->update( 7542687, {
+		"files" => {
+			"all.log" => {
+				"content" => "$worker:$build:$raw_url\n$all_log_content",
+			}
+		}
+	}
+);
+
+
 
 
 #open (my $f,'>>',"/tmp/gists");
