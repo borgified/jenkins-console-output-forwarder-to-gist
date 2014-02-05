@@ -20,6 +20,7 @@ my $filename = "/var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker
 
 open(my $fh, '<', $filename) or die "Could not open file '$filename' $!";
 
+system("mkdir -p /tmp/$build/$worker");
 system("cp /var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker/builds/$build/log /tmp/$build/$worker/build.log");
 
 my $log = do { local $/; <$fh> };
