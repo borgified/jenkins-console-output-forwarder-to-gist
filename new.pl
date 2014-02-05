@@ -20,6 +20,8 @@ my $filename = "/var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker
 
 open(my $fh, '<', $filename) or die "Could not open file '$filename' $!";
 
+system("cp /var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker/builds/$build/log /tmp/$build/$worker/build.log");
+
 my $log = do { local $/; <$fh> };
 
 
@@ -51,41 +53,6 @@ $gist->update( 7542687, {
 			}
 		}
 	}
-);
-
-
-
-
-#open (my $f,'>>',"/tmp/gists");
-#print $f "$worker => \'$a->{id}\'\n";
-
-
-__END__
-
-#6544858
-
-$gist->update( 6544858, {
-description => "",
-"files"  =>  {
-"file1.txt" => {
-"content" => $log,
-}
-}
-}
-);
-
-
-__END__
-
-my $a = $gist->create({
-"description" => "console output for $worker\n$details",
-"public" => 'true',
-"files"  =>  {
-"build.log" => {
-"content" => $log,
-}
-}
-} 
 );
 
 
