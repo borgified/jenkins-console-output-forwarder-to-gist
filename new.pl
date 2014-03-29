@@ -16,17 +16,24 @@ my $gist = $gh->gist;
 
 my($worker,$build)=@ARGV;
 
-my $filename = "/var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker/builds/$build/log";
-
-open(my $fh, '<', $filename) or die "Could not open file '$filename' $!";
+my $filename;
 
 system("mkdir -p /tmp/$build/$worker");
-system("cp /var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker/builds/$build/log /tmp/$build/$worker/build.log");
+
+if ($worker eq 'thrall' || $worker eq 'worker64-centos65'){
+	$filename = "/var/lib/jenkins/jobs/assimmon-centos/configurations/axis-label/$worker/builds/$build/log";
+	system("cp /var/lib/jenkins/jobs/assimmon-centos/configurations/axis-label/$worker/builds/$build/log /tmp/$build/$worker/build.log");
+}else{
+	$filename = "/var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker/builds/$build/log";
+	system("cp /var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker/builds/$build/log /tmp/$build/$worker/build.log");
+}
+
+open(my $fh, '<', $filename) or die "Could not open file '$filename' $!";
 
 my $log = do { local $/; <$fh> };
 
 
-$log =~ /cat (.*)sudo apt-get update\n/s;
+$log =~ /cat (.*)whoami\n/s;
 my $details=$1;
 
 my %gistconfig = do '/secret/gists.config';
