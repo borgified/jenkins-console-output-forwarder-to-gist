@@ -20,7 +20,8 @@ my $filename;
 
 system("mkdir -p /tmp/$build/$worker");
 
-if ($worker eq 'worker64-centos64' || $worker eq 'worker64-centos65'){
+#if ($worker eq 'worker64-centos64' || $worker eq 'worker64-centos65'){
+if ($worker =~ /worker\d\d-centos\d\d/){
 	$filename = "/var/lib/jenkins/jobs/assimmon-centos/configurations/axis-label/$worker/builds/$build/log";
 	system("cp /var/lib/jenkins/jobs/assimmon-centos/configurations/axis-label/$worker/builds/$build/log /tmp/$build/$worker/build.log");
 }else{
