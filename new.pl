@@ -14,20 +14,20 @@ my $gh = Net::GitHub::V3->new(
 
 my $gist = $gh->gist;
 
-my($worker,$build)=@ARGV;
+my($worker,$build,$job_name)=@ARGV;
 
 my $filename;
 
+#assimon-centos_test/label=worker64-centos65
+my @temp = split(/\//,$job_name);
+$job_name = $temp[0];
+
 system("mkdir -p /tmp/$build/$worker");
 
-#if ($worker eq 'worker64-centos64' || $worker eq 'worker64-centos65'){
-if ($worker =~ /worker\d\d-centos\d\d/){
-	$filename = "/var/lib/jenkins/jobs/assimmon-centos/configurations/axis-label/$worker/builds/$build/log";
-	system("cp /var/lib/jenkins/jobs/assimmon-centos/configurations/axis-label/$worker/builds/$build/log /tmp/$build/$worker/build.log");
-}else{
-	$filename = "/var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker/builds/$build/log";
-	system("cp /var/lib/jenkins/jobs/assimmon/configurations/axis-label/$worker/builds/$build/log /tmp/$build/$worker/build.log");
-}
+
+$filename = "/var/lib/jenkins/jobs/$job_name/configurations/axis-label/$worker/builds/$build/log";
+
+system("cp /var/lib/jenkins/jobs/$job_name/configurations/axis-label/$worker/builds/$build/log /tmp/$build/$worker/build.log");
 
 open(my $fh, '<', $filename) or die "Could not open file '$filename' $!";
 
